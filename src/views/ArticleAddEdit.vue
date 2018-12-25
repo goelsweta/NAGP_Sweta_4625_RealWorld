@@ -76,15 +76,10 @@ export default class ArticleAddEdit extends Vue {
   private tag: string = "";
 
   private beforeCreate() {
-    debugger;
     const slug = this.$route.params.slug;
     if (slug && slug !== "") {
       articles.getArticle(slug).then((response: any) => {
         this.article = response.article;
-        // this.article.title = response.article.title;
-        // this.article.body = response.article.body;
-        // this.article.tagList = response.article.tagList;
-        // this.article.description = response.article.description;
       });
     } else {
       this.article.tagList = this.tagList;
@@ -112,18 +107,22 @@ export default class ArticleAddEdit extends Vue {
       articles.editArticle(this.article).then((response: any) => {
         this.$router.push({
           name: "article",
-          params: { slug: this.$route.params.slug },
+          params: { slug: this.$route.params.slug }
         });
       });
     } else {
       articles.publishArticle(this.article).then((response: any) => {
-        debugger
         this.$router.push({
           name: "article",
-          params: { slug: response.article.slug },
+          params: { slug: response.article.slug }
         });
       });
     }
+  }
+
+  private showHide(show: boolean) {
+    const element = document.getElementById("overlay") as HTMLDivElement;
+    element.style.display = show ? "block" : "none";
   }
 }
 </script>

@@ -132,7 +132,6 @@ export async function fetchComments(slug: string): Promise<CommentsResponse | un
 
 export async function addComment(slug: string, comment: any): Promise<CommentsResponse | undefined> {
     try {
-        debugger
         return (await conduitApi.post('articles/' + slug + '/comments', {
             comment,
         })).data as CommentsResponse;

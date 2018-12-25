@@ -39,7 +39,6 @@ export default class LoginComponent extends Vue {
       })
       .then(
         (response: any) => {
-          debugger;
           window.localStorage.setItem("token", response.user.token);
           this.$router.push("/articles");
         },

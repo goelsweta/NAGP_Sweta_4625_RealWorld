@@ -4,23 +4,28 @@
       <div class="col-sm-10 col-md-8">
         <div class="comment-tabs">
           <ul class="nav nav-tabs" role="tablist">
-            <li v-bind:class="{active:!isGlobalFeed}" v-if="isUserLoggedIn">
-              <a href="javascript:void(0);" v-on:click="toggleList">
+            <li v-bind:class="{active: !isGlobalFeed && tag == ''}" v-if="isUserLoggedIn">
+              <a href="javascript:void(0);" v-on:click="toggleList(false)">
                 <h4 class="reviews text-capitalize">Your Feed</h4>
               </a>
             </li>
-            <li v-bind:class="{active:isGlobalFeed}">
-              <a href="javascript:void(0);" v-on:click="toggleList">
+            <li v-bind:class="{active:isGlobalFeed && tag == ''}">
+              <a href="javascript:void(0);" v-on:click="toggleList(true)">
                 <h4 class="reviews text-capitalize">Global Feed</h4>
+              </a>
+            </li>
+            <li v-bind:class="{active : tag != ''}" v-if="tag!=''">
+              <a href="javascript:void(0);">
+                <h4 class="reviews text-capitalize">#{{ tag }}</h4>
               </a>
             </li>
           </ul>
           <div class="tab-content">
-            <ArticleList :type="type"></ArticleList>
+            <ArticleList :type="type" :tag="tag"></ArticleList>
           </div>
         </div>
       </div>
-      <TagList></TagList>
+      <TagList @clicked="onTagClicked"></TagList>
     </div>
   </div>
 </template>
@@ -40,18 +45,25 @@ import { FeedType } from "@/shared/enums/feed-type-enum";
 })
 export default class Articles extends Vue {
   private isGlobalFeed: boolean = false;
-  private type: FeedType = FeedType.All;
+  private type: FeedType = FeedType.User;
+  private tag: string = "";
 
   get isUserLoggedIn() {
     return users.isUserLoggedIn;
   }
 
-  private created() {
+  private mounted() {
     this.isGlobalFeed = this.isUserLoggedIn ? false : true;
   }
-  private toggleList() {
-    this.isGlobalFeed = !this.isGlobalFeed;
-    this.type = this.isGlobalFeed ? FeedType.All : FeedType.User;
+
+  private onTagClicked(value: any) {
+    this.tag = value;
+    this.type = FeedType.Tag;
+  }
+  private toggleList(isGlobalFeed: boolean) {
+    this.tag = "";
+    this.isGlobalFeed = isGlobalFeed;
+    this.type = isGlobalFeed ? FeedType.All : FeedType.User;
   }
 }
 </script>

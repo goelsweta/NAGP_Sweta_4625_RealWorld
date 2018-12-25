@@ -29,7 +29,6 @@ class UserModule extends VuexModule {
     }
 
     get userimage() {
-        debugger;
         return this.profile && this.profile.image;
     }
 

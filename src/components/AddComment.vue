@@ -21,7 +21,6 @@ export default class AddComment extends Vue {
   };
 
   private addComment() {
-    debugger;
     comments
       .addComment({
         slug: this.$route.params.slug,

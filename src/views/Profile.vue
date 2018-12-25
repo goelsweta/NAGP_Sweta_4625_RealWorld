@@ -68,7 +68,7 @@ export default class Profile extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .reviews {
   color: #555;
   font-weight: bold;

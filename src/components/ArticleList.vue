@@ -42,10 +42,12 @@ import articles from "@/store/modules/articles";
 import { Article } from "@/store/models";
 import { FeedType } from "@/shared/enums/feed-type-enum";
 import users from "@/store/modules/users";
+import { Loader } from "@/shared/loader";
 
-@Component
+@Component({})
 export default class ArticleList extends Vue {
   @Prop({ default: FeedType.All }) private type: FeedType;
+  @Prop({ default: "" }) private tag: string;
 
   get articlesList() {
     return articles.articleList;
@@ -53,6 +55,7 @@ export default class ArticleList extends Vue {
 
   @Watch("type")
   onFeedTypeChnage(val: string, oldVal: string) {
+    this.showHide(true);
     let Author: string | null = "";
     let Favorited: string | null = "";
     switch (this.type) {
@@ -69,20 +72,46 @@ export default class ArticleList extends Vue {
         Author = "";
         break;
     }
-    articles.fetchArticleList({
-      author: Author,
-      favorited: Favorited,
-      limit: 500,
-      offset: 0
-    });
+    articles
+      .fetchArticleList({
+        author: Author,
+        favorited: Favorited,
+        limit: 500,
+        offset: 0
+      })
+      .then(() => {
+        this.showHide(false);
+      });
+  }
+
+  @Watch("tag")
+  onTagChange(val: string, oldVal: string) {
+    this.showHide(true);
+    articles
+      .fetchArticleList({
+        limit: 500,
+        offset: 0,
+        tag: val
+      })
+      .then(() => {
+        this.showHide(false);
+      });
   }
 
   private created() {
-    articles.fetchArticleList({
-      author: users.username,
-      limit: 500,
-      offset: 0
-    });
+    articles
+      .fetchArticleList({
+        author: users.username,
+        limit: 500,
+        offset: 0
+      })
+      .then(() => {
+        this.showHide(false);
+      });
+  }
+  private showHide(show: boolean) {
+    const element = document.getElementById("overlay") as HTMLDivElement;
+    element.style.display = show ? "block" : "none";
   }
 }
 </script>

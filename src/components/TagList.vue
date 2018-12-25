@@ -3,7 +3,13 @@
     <div class="tag-list">
       <p>Popular Tags</p>
       <div class="tag-list-inner">
-        <a href="javascript:void(0);" v-for="(tag,index) in tagList" :key="index" v-text="tag"></a>
+        <a
+          href="javascript:void(0);"
+          v-for="(tag,index) in tagList"
+          :key="index"
+          v-text="tag"
+          v-on:click="tagClicked(tag)"
+        ></a>
       </div>
     </div>
   </div>
@@ -18,10 +24,14 @@ import { TagsResponse } from "@/store/models";
 export default class TagList extends Vue {
   private tagList: any[] = [];
 
-  public created() {
+  private created() {
     tags.fetchTagList().then((response: any) => {
       this.tagList = response.tags;
     });
+  }
+
+  private tagClicked(tag: any) {
+    this.$emit('clicked', tag);
   }
 }
 </script>

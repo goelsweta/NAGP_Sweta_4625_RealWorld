@@ -62,11 +62,16 @@ export default class Article extends Vue {
   }
 
   private beforeCreate() {
+    const element = document.getElementById("overlay") as HTMLDivElement;
+    element.style.display = "block";
     articles.getArticle(this.$route.params.slug);
   }
 
+  private created() {
+    this.showHide(false);
+  }
+
   private editArticle(article: any) {
-    debugger;
     this.$router.push({
       name: "article-edit",
       params: { slug: article.slug }
@@ -80,17 +85,23 @@ export default class Article extends Vue {
   }
 
   private favoriteArticle(article: any) {
+    this.showHide(true);
     article.favorited
-      ? articles.unfavoriteArticle(article.slug)
-      : articles.favoriteArticle(article.slug);
-  }
-
-  private unfavoriteArticle(article: any) {
-    articles.unfavoriteArticle(article.slug);
+      ? articles.unfavoriteArticle(article.slug).then(() => {
+          this.showHide(false);
+        })
+      : articles.favoriteArticle(article.slug).then(() => {
+          this.showHide(false);
+        });
   }
 
   private getDate(date: string) {
     return new Date(date).toDateString();
+  }
+
+  private showHide(show: boolean) {
+    const element = document.getElementById("overlay") as HTMLDivElement;
+    element.style.display = show ? "block" : "none";
   }
 }
 </script>

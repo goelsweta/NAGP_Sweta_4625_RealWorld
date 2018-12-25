@@ -63,7 +63,6 @@ export default class RegisterComponent extends Vue {
   private registerUser() {
     users.register(this.user).then(
       (response: any) => {
-        debugger;
         window.localStorage.setItem("token", response.user.token);
         this.$router.push("/articles");
       },
