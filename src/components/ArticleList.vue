@@ -42,12 +42,11 @@ import articles from "@/store/modules/articles";
 import { Article } from "@/store/models";
 import { FeedType } from "@/shared/enums/feed-type-enum";
 import users from "@/store/modules/users";
-import { Loader } from "@/shared/loader";
 
 @Component({})
 export default class ArticleList extends Vue {
-  @Prop({ default: FeedType.All }) private type: FeedType;
-  @Prop({ default: "" }) private tag: string;
+  @Prop({ default: FeedType.User }) private type: FeedType = FeedType.User;
+  @Prop({ default: "" }) private tag: string = "";
 
   get articlesList() {
     return articles.articleList;

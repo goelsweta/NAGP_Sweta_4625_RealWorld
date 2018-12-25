@@ -59,7 +59,7 @@ export default class Profile extends Vue {
   }
 
   private created() {
-    users.getProfile(users.username);
+    users.getProfile(users.username || "");
   }
   private toggleList() {
     this.isMyArticleSelected = !this.isMyArticleSelected;

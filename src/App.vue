@@ -10,7 +10,6 @@
 import { Component, Vue } from "vue-property-decorator";
 import Header from "@/components/Header.vue"; // @ is an alias to /src
 import Footer from "@/components/Footer.vue";
-import loader from "@/shared/loader";
 
 @Component({
   components: {

@@ -72,7 +72,6 @@ export default class ArticleAddEdit extends Vue {
     tagList: this.tagList,
     description: ""
   };
-  private model: Article;
   private tag: string = "";
 
   private beforeCreate() {
