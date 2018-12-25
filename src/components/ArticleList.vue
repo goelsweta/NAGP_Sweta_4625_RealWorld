@@ -40,29 +40,48 @@
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import articles from "@/store/modules/articles";
 import { Article } from "@/store/models";
+import { FeedType } from "@/shared/enums/feed-type-enum";
+import users from "@/store/modules/users";
 
 @Component
 export default class ArticleList extends Vue {
-  @Prop({ default: "" }) private author: string;
+  @Prop({ default: FeedType.All }) private type: FeedType;
 
   get articlesList() {
     return articles.articleList;
   }
 
-  @Watch("author")
+  @Watch("type")
   onFeedTypeChnage(val: string, oldVal: string) {
+    let Author: string | null = "";
+    let Favorited: string | null = "";
+    switch (this.type) {
+      case FeedType.All:
+        Author = "";
+        Favorited = "";
+        break;
+      case FeedType.User:
+        Author = users.username;
+        Favorited = "";
+        break;
+      case FeedType.Favorited:
+        Favorited = users.username;
+        Author = "";
+        break;
+    }
     articles.fetchArticleList({
-      author: this.author,
+      author: Author,
+      favorited: Favorited,
       limit: 500,
-      offset: 0,
+      offset: 0
     });
   }
 
   private created() {
     articles.fetchArticleList({
-      author: this.author,
+      author: users.username,
       limit: 500,
-      offset: 0,
+      offset: 0
     });
   }
 }

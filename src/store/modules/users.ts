@@ -19,8 +19,18 @@ class UserModule extends VuexModule {
         this.user = response.user;
     }
 
+    @Mutation
+    public setProfile(response: any) {
+        this.profile = response.profile;
+    }
+
     get username() {
         return this.user && this.user.username || null;
+    }
+
+    get userimage() {
+        debugger;
+        return this.profile && this.profile.image;
     }
 
     get isUserLoggedIn() {
@@ -35,6 +45,11 @@ class UserModule extends VuexModule {
     @Action({ commit: 'setUser' })
     public async register(userSubmit: UserSubmit) {
         return await api.registerUser(userSubmit);
+    }
+
+    @Action({ commit: 'setProfile' })
+    public async getProfile(username: string) {
+        return await api.getProfile(username);
     }
 }
 

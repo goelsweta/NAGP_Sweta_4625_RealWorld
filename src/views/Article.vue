@@ -12,12 +12,16 @@
           v-if="isUserLoggedIn && username == article.author.username"
           class="edit-icon"
           v-on:click="editArticle(article)"
-        >Edit Article</button>
+        >
+          <i class="glyphicon glyphicon-edit"></i>Edit Article
+        </button>
         <button
           v-if="isUserLoggedIn && username == article.author.username"
           class="delete-icon"
           v-on:click="deleteArticle(article)"
-        >Delete Article</button>
+        >
+          <i class="glyphicon glyphicon-trash"></i>Delete Article
+        </button>
         <button
           v-if="isUserLoggedIn && username != article.author.username"
           class="favourite-icon"
@@ -127,15 +131,15 @@ export default class Article extends Vue {
   margin: 10px;
   margin-left: 350px;
   background-color: transparent;
-  color: #f2f2f2;
-  border: 1px solid #f2f2f2;
+  color: #ccc;
+  border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 12px;
   font-weight: 400;
 }
 
 .edit-icon:hover {
-  background-color: #f2f2f2;
+  background-color: #ccc;
   color: #fff;
 }
 
@@ -155,10 +159,6 @@ export default class Article extends Vue {
   color: #fff;
 }
 
-.delete-icon i {
-  font-size: small;
-  color: black;
-}
 .author-image {
   height: 25px;
   width: 25px;
@@ -173,6 +173,9 @@ export default class Article extends Vue {
   font-size: x-large;
   font-weight: bold;
   color: #fff;
+}
+.glyphicon {
+  padding: 5px;
 }
 
 .created-date {

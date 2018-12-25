@@ -1,26 +1,33 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-10 col-md-8">
-        <div class="comment-tabs">
-          <ul class="nav nav-tabs" role="tablist">
-            <li v-bind:class="{active:!isGlobalFeed}" v-if="isUserLoggedIn">
-              <a href="javascript:void(0);" v-on:click="toggleList">
-                <h4 class="reviews text-capitalize">Your Feed</h4>
-              </a>
-            </li>
-            <li v-bind:class="{active:isGlobalFeed}">
-              <a href="javascript:void(0);" v-on:click="toggleList">
-                <h4 class="reviews text-capitalize">Global Feed</h4>
-              </a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <ArticleList :type="type"></ArticleList>
+  <div>
+    <div class="profile">
+      <a class="author-image" href="javascript:void(0);">
+        <img v-bind:src="userimage">
+      </a>
+      <a class="username" href="javascript:void(0);" v-text="username"></a>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-10 col-md-8">
+          <div class="comment-tabs">
+            <ul class="nav nav-tabs" role="tablist">
+              <li v-bind:class="{active:isMyArticleSelected}">
+                <a href="javascript:void(0);" v-on:click="toggleList">
+                  <h4 class="reviews text-capitalize">My Articles</h4>
+                </a>
+              </li>
+              <li v-bind:class="{active:!isMyArticleSelected}" v-if="isUserLoggedIn">
+                <a href="javascript:void(0);" v-on:click="toggleList">
+                  <h4 class="reviews text-capitalize">Favorited Articles</h4>
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <ArticleList :type="type"></ArticleList>
+            </div>
           </div>
         </div>
       </div>
-      <TagList></TagList>
     </div>
   </div>
 </template>
@@ -28,30 +35,35 @@
 <script lang='ts'>
 import { Component, Vue } from "vue-property-decorator";
 import ArticleList from "@/components/ArticleList.vue"; // @ is an alias to /src
-import TagList from "@/components/TagList.vue"; // @ is an alias to /src
 import users from "@/store/modules/users";
 import { FeedType } from "@/shared/enums/feed-type-enum";
-
 @Component({
   components: {
-    ArticleList,
-    TagList
+    ArticleList
   }
 })
-export default class Articles extends Vue {
-  private isGlobalFeed: boolean = false;
-  private type: FeedType = FeedType.All;
+export default class Profile extends Vue {
+  private isMyArticleSelected: boolean = true;
+  private type: FeedType = FeedType.User;
 
   get isUserLoggedIn() {
     return users.isUserLoggedIn;
   }
 
+  get username() {
+    return users.username;
+  }
+
+  get userimage() {
+    return users.userimage;
+  }
+
   private created() {
-    this.isGlobalFeed = this.isUserLoggedIn ? false : true;
+    users.getProfile(users.username);
   }
   private toggleList() {
-    this.isGlobalFeed = !this.isGlobalFeed;
-    this.type = this.isGlobalFeed ? FeedType.All : FeedType.User;
+    this.isMyArticleSelected = !this.isMyArticleSelected;
+    this.type = this.isMyArticleSelected ? FeedType.User : FeedType.Favorited;
   }
 }
 </script>
@@ -94,6 +106,15 @@ export default class Articles extends Vue {
 
 .media-comment {
   margin-bottom: 20px;
+}
+
+.username {
+  font-size: x-large;
+  font-weight: bold;
+  color: black;
+  margin-left: 40%;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
 .media-replied {
@@ -169,5 +190,29 @@ input[type="file"] {
 
 .custom-input-file:hover .uploadPhoto {
   display: block;
+}
+
+.author-image {
+  height: 120px;
+  width: 100%;
+  display: block;
+  padding: 10px;
+}
+
+.author-image:hover {
+  color: #000;
+  text-decoration: none;
+}
+.profile {
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: #f2f2f2;
+}
+.author-image img {
+  height: 100px;
+  width: 100px;
+  border-radius: 50px;
+  align-items: center;
+  margin-left: 40%;
 }
 </style>

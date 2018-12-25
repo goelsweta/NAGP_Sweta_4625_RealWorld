@@ -40,6 +40,14 @@ export async function registerUser(user: UserSubmit): Promise<UserResponse | und
     }
 }
 
+export async function getProfile(username: string): Promise<any | undefined> {
+    try {
+        return (await conduitApi.get('profiles/' + username)).data;
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 export async function fetchArticles(articleRequest: any): Promise<ArticlesResponse | undefined> {
     try {
         return (await conduitApi.get('articles', {
